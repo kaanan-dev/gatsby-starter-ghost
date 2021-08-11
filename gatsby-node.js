@@ -64,6 +64,7 @@ exports.createPages = async ({ graphql, actions }) => {
     const authorTemplate = path.resolve(`./src/templates/author.js`)
     const pageTemplate = path.resolve(`./src/templates/page.js`)
     const postTemplate = path.resolve(`./src/templates/post.js`)
+    const tagListTemplate = path.resolve(`./src/templates/tags.js`)
 
     // Create tag pages
     tags.forEach(({ node }) => {
@@ -145,7 +146,7 @@ exports.createPages = async ({ graphql, actions }) => {
         })
     })
 
-    // Create pagination
+    // Create pagination index
     paginate({
         createPage,
         items: posts,
@@ -156,6 +157,20 @@ exports.createPages = async ({ graphql, actions }) => {
                 return `/`
             } else {
                 return `/page`
+            }
+        },
+    })
+      // Create pagination taglist
+      paginate({
+        createPage,
+        items: tags,
+        itemsPerPage: postsPerPage,
+        component: tagListTemplate,
+        pathPrefix: ({ pageNumber }) => {
+            if (pageNumber === 0) {
+                return `tags/`
+            } else {
+                return `tags/page`
             }
         },
     })
